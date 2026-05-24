@@ -20,6 +20,9 @@
     <meta property="og:title" content="Fin Vault by Ashish - Swarm Financial Terminal">
     <meta property="og:description" content="Real-time Indian Stock Market Dashboard featuring top gainers & losers, live commodities (Gold, Silver, Brent Crude), USD/INR, curated business news, active SME IPO pipeline, and a virtual compound SIP planner.">
     <meta property="og:image" content="https://finance.wizhy.in/terminal/og-image.jpg">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1024">
+    <meta property="og:image:alt" content="Fin Vault by Ashish - Indian Stock Market Terminal Dashboard">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
@@ -53,6 +56,55 @@
     }
     </script>
 
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How to calculate SIP returns in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SIP returns are calculated using the formula: M = P × ((1+i)^n - 1) / i × (1+i), where P is the monthly SIP amount, i is the monthly interest rate (annual rate ÷ 12 ÷ 100), and n is the total number of months invested."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is home loan EMI calculated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Home loan EMI is calculated using: EMI = P × r × (1+r)^n / ((1+r)^n - 1), where P is the principal loan amount, r is the monthly interest rate (annual rate ÷ 12 ÷ 100), and n is the tenure in months."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the new income tax slabs for FY 2025-26 in India?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Under the New Tax Regime for FY 2025-26: Income up to ₹3 lakh is taxed at 0%, ₹3–7 lakh at 5%, ₹7–10 lakh at 10%, ₹10–12 lakh at 15%, ₹12–15 lakh at 20%, and above ₹15 lakh at 30%. A standard deduction of ₹75,000 is available."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is HRA exemption calculated for salaried employees?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "HRA exemption under Section 10(13A) is the minimum of: (1) Actual HRA received, (2) Rent paid minus 10% of basic salary, or (3) 50% of basic salary for metro cities (Mumbai, Delhi, Chennai, Kolkata) or 40% for non-metro cities."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Nifty 50 index?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Nifty 50 is the flagship benchmark stock market index of the National Stock Exchange (NSE) of India. It represents the weighted average of 50 of the largest Indian companies listed on the NSE across 13 sectors."
+          }
+        }
+      ]
+    }
+    </script>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -75,7 +127,9 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"></noscript>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -307,50 +361,12 @@
                     <span id="ticker-dow" class="text-sm font-medium text-white">50,579.70</span>
                     <span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-arrow-trend-up mr-1"></i>+0.58%</span>
                 </div>
-                
-                <!-- Duplicate Ticker items for seamless loop -->
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs font-semibold text-slate-400 font-outfit uppercase tracking-wider">Nifty 50</span>
-                    <span id="ticker-nifty-2" class="text-sm font-bold font-outfit text-white">23,719.30</span>
-                    <span id="ticker-nifty-badge-2" class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 flex items-center gap-1">
-                        <i class="fa-solid fa-caret-up"></i> +64.60 (+0.27%)
-                    </span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs font-semibold text-emerald-400 font-outfit">TRENT</span>
-                    <span id="ticker-trent-2" class="text-sm font-medium text-white">₹4,296.50</span>
-                    <span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-arrow-trend-up mr-1"></i>+3.18%</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs font-semibold text-emerald-400 font-outfit">SHRIRAMFIN</span>
-                    <span id="ticker-shriramfin-2" class="text-sm font-medium text-white">₹941.00</span>
-                    <span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-arrow-trend-up mr-1"></i>+2.98%</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs font-semibold text-rose-400 font-outfit">MAXHEALTH</span>
-                    <span id="ticker-maxhealth-2" class="text-sm font-medium text-white">₹1,023.25</span>
-                    <span class="text-xs font-bold text-rose-400"><i class="fa-solid fa-arrow-trend-down mr-1"></i>-6.24%</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs font-semibold text-slate-300 font-outfit">GOLD 24K</span>
-                    <span id="ticker-gold-2" class="text-sm font-medium text-white">₹1,59,490</span>
-                    <span class="text-xs font-bold text-rose-400"><i class="fa-solid fa-arrow-trend-down mr-1"></i>-0.77%</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs font-semibold text-slate-300 font-outfit">USD/INR</span>
-                    <span id="ticker-usdinr-2" class="text-sm font-medium text-white">₹95.63</span>
-                    <span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-arrow-trend-up mr-1"></i>+0.13%</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs font-semibold text-slate-300 font-outfit">DOW JONES</span>
-                    <span id="ticker-dow-2" class="text-sm font-medium text-white">50,579.70</span>
-                    <span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-arrow-trend-up mr-1"></i>+0.58%</span>
-                </div>
             </div>
         </div>
     </div>
 
     <!-- Main Dashboard Container -->
+    <main id="main-content" aria-label="Fin Vault Financial Dashboard">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         
         <!-- Premium Header Area -->
@@ -1166,6 +1182,7 @@
         </footer>
 
     </div>
+    </main>
 
     <!-- Pinned Slide-Over Details & Technical Chart Side-Drawer -->
     <div id="chartDrawer" class="fixed top-0 right-0 h-full w-[460px] sm:w-[520px] max-w-full z-50 bg-slate-900/98 dark:bg-slate-950/98 shadow-2xl border-l border-slate-800 dark:border-white/10 transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
@@ -1559,10 +1576,8 @@
             
             // Ticker Nifty
             document.getElementById("ticker-nifty").textContent = niftyLtp.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById("ticker-nifty-2").textContent = niftyLtp.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const caretIcon = niftyPct >= 0 ? '<i class="fa-solid fa-caret-up"></i>' : '<i class="fa-solid fa-caret-down"></i>';
             document.getElementById("ticker-nifty-badge").innerHTML = `${caretIcon} ${niftyChange >= 0 ? '+' : ''}${niftyChange.toFixed(2)} (${niftyPct >= 0 ? '+' : ''}${niftyPct.toFixed(2)}%)`;
-            document.getElementById("ticker-nifty-badge-2").innerHTML = `${caretIcon} ${niftyChange >= 0 ? '+' : ''}${niftyChange.toFixed(2)} (${niftyPct >= 0 ? '+' : ''}${niftyPct.toFixed(2)}%)`;
 
             // Hero Dow Jones
             const dowAsset = globalMarketsData[0];
@@ -1570,17 +1585,14 @@
             document.getElementById("hero-dow-pct").innerHTML = `<i class="fa-solid fa-chevron-${dowAsset.chgPct >= 0 ? 'up' : 'down'}"></i> ${dowAsset.chgPct >= 0 ? '+' : ''}${dowAsset.chgPct.toFixed(2)}%`;
             document.getElementById("hero-dow-abs").textContent = `${dowAsset.change >= 0 ? '+' : ''}${dowAsset.change.toFixed(2)} pts`;
             document.getElementById("ticker-dow").textContent = formatVal(dowAsset.ltp, "USD");
-            document.getElementById("ticker-dow-2").textContent = formatVal(dowAsset.ltp, "USD");
 
             // Hero Gold
             const goldAsset = commoditiesData[0];
             document.getElementById("ticker-gold").textContent = goldAsset.ltp.toLocaleString('en-IN');
-            document.getElementById("ticker-gold-2").textContent = goldAsset.ltp.toLocaleString('en-IN');
 
             // Hero USD/INR
             const usdAsset = currenciesData[0];
             document.getElementById("ticker-usdinr").textContent = "₹" + usdAsset.ltp.toFixed(2);
-            document.getElementById("ticker-usdinr-2").textContent = "₹" + usdAsset.ltp.toFixed(2);
         }
 
         // Live Console Terminal logs simulation
