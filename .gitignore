@@ -1,0 +1,10 @@
+# Backup copy files
+* - Copy*.html
+index - Copy*.html
+
+# Implementation/Task documents (optional to ignore, but we can keep or ignore them)
+# Let's keep deploy_wordpress.md and finvault-watchlist-sync.php as they are part of the release!
+# Let's ignore the task and plan logs if they are not needed on github:
+task.md
+walkthrough.md
+implementation_plan.md
