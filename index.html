@@ -2245,7 +2245,7 @@
 
         // Theme Switcher Engine
         function initTheme() {
-            const currentTheme = localStorage.getItem("theme") || "dark";
+            const currentTheme = localStorage.getItem("finvault_theme") || "dark";
             if (currentTheme === "light") {
                 document.documentElement.classList.remove("dark");
                 document.documentElement.classList.add("light");
@@ -2260,11 +2260,11 @@
             if (isDark) {
                 document.documentElement.classList.remove("dark");
                 document.documentElement.classList.add("light");
-                localStorage.setItem("theme", "light");
+                localStorage.setItem("finvault_theme", "light");
             } else {
                 document.documentElement.classList.remove("light");
                 document.documentElement.classList.add("dark");
-                localStorage.setItem("theme", "dark");
+                localStorage.setItem("finvault_theme", "dark");
             }
         });
 
