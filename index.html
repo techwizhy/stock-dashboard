@@ -439,21 +439,21 @@
                             <circle cx="50" cy="50" r="41" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="257.6" stroke-dashoffset="82.4" class="transform origin-center rotate-[90deg] radar-glow" />
                             
                             <!-- Active needle pointer dot at 68% (Greed Zone) -->
-                            <circle cx="50" cy="9" r="3.5" fill="#6366f1" class="transform origin-center rotate-[244.8deg] radar-glow" />
+                            <circle id="mmiNeedleDot" cx="50" cy="9" r="3.5" fill="#6366f1" class="transform origin-center rotate-[244.8deg] radar-glow" />
                         </svg>
                         
                         <!-- Center statistics score overlay -->
                         <div class="mmi-score-center">
-                            <span class="text-lg font-extrabold font-outfit text-slate-800 dark:text-white leading-none">68</span>
-                            <span class="text-[8px] font-bold text-indigo-600 dark:text-indigo-400 font-outfit uppercase mt-0.5 tracking-wider">Greed</span>
+                            <span id="mmiScoreText" class="text-lg font-extrabold font-outfit text-slate-800 dark:text-white leading-none">68</span>
+                            <span id="mmiLabelText" class="text-[8px] font-bold text-indigo-600 dark:text-indigo-400 font-outfit uppercase mt-0.5 tracking-wider">Greed</span>
                         </div>
                     </div>
                     <div>
                         <div class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-outfit leading-none">Market Mood Radar</div>
-                        <div class="text-sm font-extrabold text-emerald-500 dark:text-emerald-400 mt-1.5 uppercase font-outfit tracking-wide flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Greed Stage
+                        <div id="mmiStageContainer" class="text-sm font-extrabold text-emerald-500 dark:text-emerald-400 mt-1.5 uppercase font-outfit tracking-wide flex items-center gap-1.5">
+                            <span id="mmiPingDot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> <span id="mmiStageText">Greed Stage</span>
                         </div>
-                        <div class="text-[9px] text-slate-500 dark:text-slate-400 font-medium leading-normal mt-1 max-w-[150px]">
+                        <div id="mmiDescText" class="text-[9px] text-slate-500 dark:text-slate-400 font-medium leading-normal mt-1 max-w-[150px]">
                             Bullish liquidity active. Derivatives show solid open interest.
                         </div>
                     </div>
@@ -1711,6 +1711,69 @@
             updateHighlightsPanel();
         }
 
+        // Dynamic live needle gauge and stage label renderer for Market Mood Index (MMI)
+        function updateMMILive(score) {
+            const needle = document.getElementById("mmiNeedleDot");
+            const scoreText = document.getElementById("mmiScoreText");
+            const labelText = document.getElementById("mmiLabelText");
+            const stageText = document.getElementById("mmiStageText");
+            const descText = document.getElementById("mmiDescText");
+            const pingDot = document.getElementById("mmiPingDot");
+
+            if (!needle || !scoreText) return;
+
+            scoreText.textContent = score;
+
+            // Needle angle rotation (90deg is 0, full circle is 360deg)
+            const rotationAngle = 90 + (score / 100) * 360;
+            needle.style.transform = `rotate(${rotationAngle}deg)`;
+
+            let moodLabel = "Neutral";
+            let moodStage = "Neutral Stage";
+            let moodDesc = "Market shows balanced allocation strength.";
+            let colorClass = "text-yellow-500 dark:text-yellow-400";
+            let bgClass = "bg-yellow-500";
+
+            if (score < 30) {
+                moodLabel = "Fear";
+                moodStage = "Extreme Fear";
+                moodDesc = "High market panic. Volatility indices spiking. FIIs liquidating blocks.";
+                colorClass = "text-rose-500 dark:text-rose-400 animate-pulse";
+                bgClass = "bg-rose-500";
+            } else if (score >= 30 && score < 50) {
+                moodLabel = "Fear";
+                moodStage = "Fear Stage";
+                moodDesc = "Cautious retail sentiments. Option puts indicate short-term coverage.";
+                colorClass = "text-orange-500 dark:text-orange-400";
+                bgClass = "bg-orange-500";
+            } else if (score >= 50 && score < 70) {
+                moodLabel = "Greed";
+                moodStage = "Greed Stage";
+                moodDesc = "Bullish liquidity active. Derivatives show solid open interest.";
+                colorClass = "text-emerald-500 dark:text-emerald-400";
+                bgClass = "bg-emerald-500";
+            } else if (score >= 70) {
+                moodLabel = "Greed";
+                moodStage = "Extreme Greed";
+                moodDesc = "FOMO driving high premiums. Valuation metrics highly stretched.";
+                colorClass = "text-purple-500 dark:text-purple-400 animate-bounce";
+                bgClass = "bg-purple-500";
+            }
+
+            labelText.textContent = moodLabel;
+            stageText.textContent = moodStage;
+            descText.textContent = moodDesc;
+            
+            // Apply colors
+            const stageContainer = document.getElementById("mmiStageContainer");
+            if (stageContainer) {
+                stageContainer.className = `text-sm font-extrabold ${colorClass} mt-1.5 uppercase font-outfit tracking-wide flex items-center gap-1.5`;
+            }
+            if (pingDot) {
+                pingDot.className = `w-1.5 h-1.5 rounded-full ${bgClass} animate-ping`;
+            }
+        }
+
         // Dynamically update main dashboard widgets with latest simulated price ticks
         function updateHighlightsPanel() {
             const niftyLtp = window.niftyLtp;
@@ -1725,6 +1788,19 @@
             document.getElementById("ticker-nifty").textContent = niftyLtp.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             const caretIcon = niftyPct >= 0 ? '<i class="fa-solid fa-caret-up"></i>' : '<i class="fa-solid fa-caret-down"></i>';
             document.getElementById("ticker-nifty-badge").innerHTML = `${caretIcon} ${niftyChange >= 0 ? '+' : ''}${niftyChange.toFixed(2)} (${niftyPct >= 0 ? '+' : ''}${niftyPct.toFixed(2)}%)`;
+
+            // Dynamic Market Mood Index (MMI) computed mathematically from live Nifty constituent advances vs declines!
+            const advances = niftyMasterDatabase.filter(s => s.chgPct > 0).length;
+            const totalStocks = niftyMasterDatabase.length;
+            const adRatio = advances / (totalStocks || 1); // 0 to 1
+
+            // Base score derived from Advancing ratio + Nifty percentage factor
+            let moodScore = Math.round(adRatio * 100);
+            moodScore += Math.round(niftyPct * 12);
+            moodScore = Math.max(5, Math.min(95, moodScore)); // Keep inside gauge bounds (5 - 95)
+            
+            // Dynamic UI updates
+            updateMMILive(moodScore);
 
             // Hero Dow Jones
             const dowAsset = globalMarketsData[0];
