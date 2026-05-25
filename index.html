@@ -1568,7 +1568,7 @@
 
             // Compile dynamic list of all Yahoo tickers to request
             const indexTickers = ["^NSEI", "^BSESN", "^NSEBANK", "^CNXIT", "^DJI", "^GSPC", "^IXIC", "GC=F", "SI=F", "BZ=F", "INR=X"];
-            const stockTickers = niftyMasterDatabase.map(s => s.symbol === "M&M" ? "M%26M.NS" : s.symbol + ".NS");
+            const stockTickers = niftyMasterDatabase.map(s => s.symbol + ".NS");
             const allTickers = [...indexTickers, ...stockTickers];
 
             let fetchedData = null;
