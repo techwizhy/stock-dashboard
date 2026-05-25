@@ -408,14 +408,14 @@
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-outfit">MARKET STATE</span>
                         <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                            <span id="marketStatePing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                            <span id="marketStateIndicator" class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                         </span>
                     </div>
-                    <div class="text-base font-extrabold font-outfit text-amber-600 dark:text-amber-400 flex items-center gap-1.5 leading-none">
-                        <i class="fa-solid fa-lock text-xs"></i> CLOSED <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">(WEEKEND)</span>
+                    <div id="marketStateTextContainer" class="text-base font-extrabold font-outfit text-amber-600 dark:text-amber-400 flex items-center gap-1.5 leading-none">
+                        <i id="marketStateIcon" class="fa-solid fa-lock text-xs"></i> <span id="marketStateText">CLOSED <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">(WEEKEND)</span></span>
                     </div>
-                    <div class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-2.5 font-outfit leading-none">
+                    <div id="marketSessionDate" class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-2.5 font-outfit leading-none">
                         May 22, 2026 Trading Session
                     </div>
                 </div>
@@ -2168,6 +2168,9 @@
             refreshLoader.classList.remove("hidden");
             manualRefreshBtn.classList.add("scale-95", "opacity-75");
 
+            // Update live market state and date
+            updateMarketState();
+
             // 1. Fetch real API currency rates
             await fetchLiveCurrencyRate();
 
@@ -2254,6 +2257,73 @@
                 behavior: 'smooth'
             });
         };
+
+        // Dynamic Market State Engine (Automatically checks Indian Market open/closed hours in IST)
+        function updateMarketState() {
+            const statePing = document.getElementById("marketStatePing");
+            const stateIndicator = document.getElementById("marketStateIndicator");
+            const textContainer = document.getElementById("marketStateTextContainer");
+            const stateIcon = document.getElementById("marketStateIcon");
+            const stateText = document.getElementById("marketStateText");
+            const sessionDate = document.getElementById("marketSessionDate");
+
+            if (!stateText || !sessionDate) return;
+
+            // Get current time in IST (Indian Standard Time = UTC+5:30)
+            const dateIST = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+            const day = dateIST.getDay(); // 0: Sunday, 1: Monday, ..., 6: Saturday
+            const hours = dateIST.getHours();
+            const minutes = dateIST.getMinutes();
+            const timeInMinutes = hours * 60 + minutes;
+
+            // Date formatting: e.g. "May 25, 2026"
+            const formattedDate = dateIST.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            });
+            sessionDate.textContent = `${formattedDate} Trading Session`;
+
+            let isMarketOpen = false;
+            let statusReason = "";
+
+            if (day === 0 || day === 6) {
+                isMarketOpen = false;
+                statusReason = "WEEKEND";
+            } else {
+                // Weekday: Monday to Friday
+                const openTime = 9 * 60 + 15; // 09:15 AM
+                const closeTime = 15 * 60 + 30; // 03:30 PM
+
+                if (timeInMinutes < openTime) {
+                    isMarketOpen = false;
+                    statusReason = "PRE-MARKET";
+                } else if (timeInMinutes >= closeTime) {
+                    isMarketOpen = false;
+                    statusReason = "POST-MARKET";
+                } else {
+                    isMarketOpen = true;
+                    statusReason = "LIVE";
+                }
+            }
+
+            // Update UI State
+            if (isMarketOpen) {
+                // Open State styles (Green)
+                if (statePing) statePing.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+                if (stateIndicator) stateIndicator.className = "relative inline-flex rounded-full h-2 w-2 bg-emerald-500";
+                if (textContainer) textContainer.className = "text-base font-extrabold font-outfit text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 leading-none";
+                if (stateIcon) stateIcon.className = "fa-solid fa-lock-open text-xs";
+                stateText.innerHTML = `OPEN <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">(${statusReason})</span>`;
+            } else {
+                // Closed State styles (Amber)
+                if (statePing) statePing.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75";
+                if (stateIndicator) stateIndicator.className = "relative inline-flex rounded-full h-2 w-2 bg-amber-500";
+                if (textContainer) textContainer.className = "text-base font-extrabold font-outfit text-amber-600 dark:text-amber-400 flex items-center gap-1.5 leading-none";
+                if (stateIcon) stateIcon.className = "fa-solid fa-lock text-xs";
+                stateText.innerHTML = `CLOSED <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">(${statusReason})</span>`;
+            }
+        }
 
         // Theme Switcher Engine
         function initTheme() {
@@ -3295,6 +3365,7 @@
         // Initialize Core Engines on screen load
         checkWordPressContext();
         initTheme();
+        updateMarketState(); // Initialize live market state and current date dynamically
         computeMoversFromDatabase();
         wpSyncLoad(); // Fetch WordPress profile saved state
         renderMovers();
