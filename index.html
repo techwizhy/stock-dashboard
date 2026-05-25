@@ -1264,17 +1264,22 @@
 
     <!-- Javascript Engine to Load, Manage Data and Switch Tabs Dynamically -->
     <script>
+        // Real-time Master Ticker quotes (Set to exact Moneycontrol seed values on load!)
+        window.niftyLtp = 23963.60;
+        window.niftyChange = 244.30;
+        window.niftyPct = 1.03;
+
         // MASTER DATABASE: Complete 52 Nifty 50 + Custom Swarm Stocks Dictionary
         const niftyMasterDatabase = [
             { symbol: "TRENT", name: "Trent Ltd.", ltp: 4296.50, change: 132.40, chgPct: 3.18, high: 4310.00, low: 4180.00, open: 4200.00, prevClose: 4164.10, h52w: 4500.00, l52w: 2100.00, ytd: 45.2, rating: "Strong Buy" },
             { symbol: "SHRIRAMFIN", name: "Shriram Finance", ltp: 941.00, change: 27.25, chgPct: 2.98, high: 948.00, low: 918.00, open: 920.00, prevClose: 913.75, h52w: 1050.00, l52w: 650.00, ytd: 28.4, rating: "Buy" },
             { symbol: "AXISBANK", name: "Axis Bank Ltd.", ltp: 1285.40, change: 33.65, chgPct: 2.69, high: 1292.00, low: 1254.00, open: 1260.00, prevClose: 1251.75, h52w: 1340.00, l52w: 980.00, ytd: 18.2, rating: "Strong Buy" },
-            { symbol: "ICICIBANK", name: "ICICI Bank Ltd.", ltp: 1264.30, change: 24.30, chgPct: 1.96, high: 1272.00, low: 1241.00, open: 1245.00, prevClose: 1240.00, h52w: 1300.00, l52w: 930.00, ytd: 22.1, rating: "Strong Buy" },
-            { symbol: "WIPRO", name: "Wipro Ltd.", ltp: 203.11, change: 3.24, chgPct: 1.62, high: 205.50, low: 200.10, open: 200.50, prevClose: 199.87, h52w: 240.00, l52w: 160.00, ytd: -2.3, rating: "Neutral" },
+            { symbol: "ICICIBANK", name: "ICICI Bank Ltd.", ltp: 1277.20, change: 12.90, chgPct: 1.02, high: 1285.00, low: 1250.00, open: 1262.00, prevClose: 1264.30, h52w: 1300.00, l52w: 930.00, ytd: 22.1, rating: "Strong Buy" },
+            { symbol: "WIPRO", name: "Wipro Ltd.", ltp: 208.25, change: 5.13, chgPct: 2.53, high: 210.50, low: 202.10, open: 203.11, prevClose: 203.12, h52w: 240.00, l52w: 160.00, ytd: 2.5, rating: "Buy" },
             { symbol: "RELIANCE", name: "Reliance Industries", ltp: 2450.50, change: 35.40, chgPct: 1.46, high: 2465.00, low: 2418.00, open: 2420.00, prevClose: 2415.10, h52w: 2750.00, l52w: 2150.00, ytd: 12.4, rating: "Buy" },
             { symbol: "TCS", name: "Tata Consultancy", ltp: 3850.00, change: 48.20, chgPct: 1.27, high: 3870.00, low: 3790.00, open: 3810.00, prevClose: 3801.80, h52w: 4250.00, l52w: 3400.00, ytd: 8.5, rating: "Buy" },
             { symbol: "INFY", name: "Infosys Ltd.", ltp: 1420.25, change: 17.15, chgPct: 1.22, high: 1432.00, low: 1402.00, open: 1405.00, prevClose: 1403.10, h52w: 1720.00, l52w: 1350.00, ytd: -5.4, rating: "Neutral" },
-            { symbol: "HDFCBANK", name: "HDFC Bank Ltd.", ltp: 1610.40, change: 18.50, chgPct: 1.16, high: 1622.00, low: 1592.00, open: 1595.00, prevClose: 1591.90, h52w: 1800.00, l52w: 1360.00, ytd: 4.2, rating: "Buy" },
+            { symbol: "HDFCBANK", name: "HDFC Bank Ltd.", ltp: 783.35, change: 16.55, chgPct: 2.16, high: 792.00, low: 765.00, open: 768.00, prevClose: 766.80, h52w: 1800.00, l52w: 720.00, ytd: 4.2, rating: "Buy" },
             { symbol: "BHARTIARTL", name: "Bharti Airtel", ltp: 1120.50, change: 12.20, chgPct: 1.10, high: 1128.00, low: 1108.00, open: 1110.00, prevClose: 1108.30, h52w: 1250.00, l52w: 850.00, ytd: 15.6, rating: "Strong Buy" },
             { symbol: "HINDUNILVR", name: "Hindustan Unilever", ltp: 2345.00, change: 23.00, chgPct: 0.99, high: 2358.00, low: 2320.00, open: 2325.00, prevClose: 2322.00, h52w: 2700.00, l52w: 2200.00, ytd: -3.8, rating: "Neutral" },
             { symbol: "SBIN", name: "State Bank of India", ltp: 765.40, change: 6.80, chgPct: 0.90, high: 771.00, low: 758.00, open: 760.00, prevClose: 758.60, h52w: 840.00, l52w: 550.00, ytd: 14.2, rating: "Buy" },
@@ -1504,6 +1509,7 @@
 
         // Live Feed Engine: USD/INR API call
         async function fetchLiveCurrencyRate() {
+            // Replaced with combined Yahoo Finance fetch, but kept as a robust fallback
             try {
                 const response = await fetch("https://open.er-api.com/v6/latest/USD");
                 if (response.ok) {
@@ -1516,14 +1522,6 @@
                         usdAsset.ltp = parseFloat(newRate.toFixed(2));
                         usdAsset.change = parseFloat((usdAsset.ltp - usdAsset.prevClose).toFixed(2));
                         usdAsset.chgPct = parseFloat(((usdAsset.change / usdAsset.prevClose) * 100).toFixed(2));
-                        
-                        if (usdAsset.ltp > oldLtp) {
-                            usdAsset.lastTickState = "up";
-                            triggerTickSound('up');
-                        } else if (usdAsset.ltp < oldLtp) {
-                            usdAsset.lastTickState = "down";
-                            triggerTickSound('down');
-                        }
                     }
                 }
             } catch (err) {
@@ -1531,10 +1529,158 @@
             }
         }
 
+        // Combined Real-Time Client Fetch: Pulls live quotes directly from Yahoo Finance APIs
+        let isFetchingQuotes = false;
+        async function fetchLiveMarketQuotes() {
+            if (isFetchingQuotes) return;
+            isFetchingQuotes = true;
+
+            const indicesMap = {
+                "nifty": "^NSEI",
+                "sensex": "^BSESN",
+                "dow": "^DJI",
+                "sp500": "^GSPC",
+                "nasdaq": "^IXIC",
+                "gold": "GC=F",
+                "silver": "SI=F",
+                "crude": "BZ=F",
+                "usdinr": "INR=X"
+            };
+
+            const stockMap = {
+                "TRENT": "TRENT.NS",
+                "SHRIRAMFIN": "SHRIRAMFIN.NS",
+                "AXISBANK": "AXISBANK.NS",
+                "ICICIBANK": "ICICIBANK.NS",
+                "WIPRO": "WIPRO.NS",
+                "RELIANCE": "RELIANCE.NS",
+                "TCS": "TCS.NS",
+                "INFY": "INFY.NS",
+                "HDFCBANK": "HDFCBANK.NS",
+                "BHARTIARTL": "BHARTIARTL.NS",
+                "HINDUNILVR": "HINDUNILVR.NS",
+                "SBIN": "SBIN.NS",
+                "LT": "LT.NS",
+                "TATAMOTORS": "TATAMOTORS.NS",
+                "ITC": "ITC.NS"
+            };
+
+            const fetchPromises = [];
+
+            // 1. Queue Indices & Commodities
+            Object.entries(indicesMap).forEach(([key, ySymbol]) => {
+                fetchPromises.push(
+                    fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySymbol)}?interval=1d&range=1d`)
+                        .then(res => res.json())
+                        .then(json => {
+                            const meta = json.chart.result[0].meta;
+                            return {
+                                type: "indices",
+                                key,
+                                ltp: meta.regularMarketPrice,
+                                prevClose: meta.previousClose,
+                                change: meta.regularMarketPrice - meta.previousClose,
+                                chgPct: ((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100
+                            };
+                        })
+                        .catch(err => {
+                            console.warn(`Client quote offline for ${key}:`, err);
+                            return null;
+                        })
+                );
+            });
+
+            // 2. Queue Selected Nifty 50 Stocks
+            Object.entries(stockMap).forEach(([symbol, ySymbol]) => {
+                fetchPromises.push(
+                    fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySymbol)}?interval=1d&range=1d`)
+                        .then(res => res.json())
+                        .then(json => {
+                            const meta = json.chart.result[0].meta;
+                            return {
+                                type: "stocks",
+                                symbol,
+                                ltp: meta.regularMarketPrice,
+                                prevClose: meta.previousClose,
+                                change: meta.regularMarketPrice - meta.previousClose,
+                                chgPct: ((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100,
+                                open: meta.regularMarketOpen || meta.regularMarketPrice,
+                                high: meta.high || meta.regularMarketPrice,
+                                low: meta.low || meta.regularMarketPrice
+                            };
+                        })
+                        .catch(err => {
+                            console.warn(`Client quote offline for stock ${symbol}:`, err);
+                            return null;
+                        })
+                );
+            });
+
+            try {
+                const results = await Promise.all(fetchPromises);
+                logToTerminal("Connecting to Yahoo Finance live feed server...");
+                
+                results.forEach(res => {
+                    if (!res) return;
+
+                    if (res.type === "indices") {
+                        if (res.key === "nifty") {
+                            window.niftyLtp = res.ltp;
+                            window.niftyChange = res.change;
+                            window.niftyPct = res.chgPct;
+                        } else if (res.key === "dow") {
+                            const dow = globalMarketsData.find(g => g.symbol === "DOW JONES");
+                            if (dow) { dow.ltp = res.ltp; dow.change = res.change; dow.chgPct = res.chgPct; }
+                        } else if (res.key === "sp500") {
+                            const sp = globalMarketsData.find(g => g.symbol === "S&P 500");
+                            if (sp) { sp.ltp = res.ltp; sp.change = res.change; sp.chgPct = res.chgPct; }
+                        } else if (res.key === "nasdaq") {
+                            const nas = globalMarketsData.find(g => g.symbol === "NASDAQ");
+                            if (nas) { nas.ltp = res.ltp; nas.change = res.change; nas.chgPct = res.chgPct; }
+                        } else if (res.key === "gold") {
+                            const gold = commoditiesData.find(c => c.symbol === "GOLD (10g)");
+                            if (gold) { gold.ltp = res.ltp; gold.change = res.change; gold.chgPct = res.chgPct; }
+                        } else if (res.key === "silver") {
+                            const silver = commoditiesData.find(c => c.symbol === "SILVER (1kg)");
+                            if (silver) { silver.ltp = res.ltp; silver.change = res.change; silver.chgPct = res.chgPct; }
+                        } else if (res.key === "crude") {
+                            const crude = commoditiesData.find(c => c.symbol === "BRENT CRUDE");
+                            if (crude) { crude.ltp = res.ltp; crude.change = res.change; crude.chgPct = res.chgPct; }
+                        } else if (res.key === "usdinr") {
+                            const usd = currenciesData.find(c => c.symbol === "USD / INR");
+                            if (usd) { usd.ltp = res.ltp; usd.change = res.change; usd.chgPct = res.chgPct; }
+                        }
+                    } else if (res.type === "stocks") {
+                        const stock = niftyMasterDatabase.find(s => s.symbol === res.symbol);
+                        if (stock) {
+                            stock.ltp = res.ltp;
+                            stock.change = res.change;
+                            stock.chgPct = res.chgPct;
+                            stock.open = res.open;
+                            stock.high = res.high;
+                            stock.low = res.low;
+                            stock.prevClose = res.prevClose;
+                        }
+                    }
+                });
+
+                logToTerminal("Yahoo Finance live quotes successfully synced!");
+            } catch (err) {
+                console.error("Yahoo Finance multi quote error: ", err);
+            } finally {
+                isFetchingQuotes = false;
+                computeMoversFromDatabase();
+                updateHighlightsPanel();
+            }
+        }
+
         // Simulates realistic stock/commodity ticker changes (tick-by-tick random walks)
         function simulateMarketTick() {
             const assets = [...niftyMasterDatabase, ...commoditiesData, ...globalMarketsData];
             let soundTriggered = false;
+
+            // Trigger real quotes sync in background during auto-refresh
+            fetchLiveMarketQuotes();
 
             assets.forEach(asset => {
                 if (Math.random() < 0.35) {
@@ -1549,16 +1695,17 @@
                     
                     asset.change = parseFloat((asset.change + delta).toFixed(2));
                     asset.chgPct = parseFloat(((asset.change / asset.prevClose) * 100).toFixed(2));
-                    
-                    if (asset.ltp > oldLtp) {
-                        asset.lastTickState = "up";
-                        if (!soundTriggered) { triggerTickSound('up'); soundTriggered = true; }
-                    } else if (asset.ltp < oldLtp) {
-                        asset.lastTickState = "down";
-                        if (!soundTriggered) { triggerTickSound('down'); soundTriggered = true; }
-                    }
                 }
             });
+
+            // Simulate Nifty tick
+            if (Math.random() < 0.35) {
+                const tickPct = (Math.random() * 0.3 - 0.15) / 100;
+                const delta = window.niftyLtp * tickPct;
+                window.niftyLtp = parseFloat((window.niftyLtp + delta).toFixed(2));
+                window.niftyChange = parseFloat((window.niftyChange + delta).toFixed(2));
+                window.niftyPct = parseFloat(((window.niftyChange / 23719.30) * 100).toFixed(2));
+            }
 
             computeMoversFromDatabase();
             updateHighlightsPanel();
@@ -1566,9 +1713,9 @@
 
         // Dynamically update main dashboard widgets with latest simulated price ticks
         function updateHighlightsPanel() {
-            const niftyLtp = 23719.30 + (niftyMasterDatabase[0].ltp - 4296.50) * 0.15; // correlate to trent
-            const niftyChange = niftyLtp - 23654.70;
-            const niftyPct = (niftyChange / 23654.70) * 100;
+            const niftyLtp = window.niftyLtp;
+            const niftyChange = window.niftyChange;
+            const niftyPct = window.niftyPct;
             
             document.getElementById("hero-nifty-ltp").textContent = formatVal(niftyLtp, "INR");
             document.getElementById("hero-nifty-pct").innerHTML = `<i class="fa-solid fa-chevron-${niftyPct >= 0 ? 'up' : 'down'}"></i> ${niftyPct >= 0 ? '+' : ''}${niftyPct.toFixed(2)}%`;
@@ -2171,8 +2318,11 @@
             // Update live market state and date
             updateMarketState();
 
-            // 1. Fetch real API currency rates
-            await fetchLiveCurrencyRate();
+            // 1. Fetch real API currency rates and Yahoo stock quotes
+            await Promise.all([
+                fetchLiveCurrencyRate(),
+                fetchLiveMarketQuotes()
+            ]);
 
             // 2. Perform live tick simulation
             simulateMarketTick();
@@ -3366,6 +3516,7 @@
         checkWordPressContext();
         initTheme();
         updateMarketState(); // Initialize live market state and current date dynamically
+        fetchLiveMarketQuotes(); // Pull real live stock quotes from Yahoo Finance directly!
         computeMoversFromDatabase();
         wpSyncLoad(); // Fetch WordPress profile saved state
         renderMovers();

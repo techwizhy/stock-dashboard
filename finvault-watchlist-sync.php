@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'rest_api_init', 'finvault_register_watchlist_routes' );
 
 function finvault_register_watchlist_routes() {
+    // 1. Sync User Watchlist
     register_rest_route( 'finvault/v1', '/watchlist', array(
         array(
             'methods'             => WP_REST_Server::READABLE,
@@ -40,6 +41,13 @@ function finvault_register_watchlist_routes() {
                 ),
             ),
         ),
+    ) );
+
+    // 2. Secure Yahoo Finance Public Proxy API
+    register_rest_route( 'finvault/v1', '/market-data', array(
+        'methods'             => WP_REST_Server::READABLE,
+        'callback'            => 'finvault_get_market_data',
+        'permission_callback' => '__return_true', // Publicly accessible CORS-friendly proxy!
     ) );
 }
 
@@ -126,5 +134,87 @@ function finvault_save_user_watchlist( $request ) {
         'success'   => true,
         'message'   => __( 'Watchlist successfully synced to your profile.', 'finvault-sync' ),
         'watchlist' => $sanitized_watchlist,
+    ) );
+}
+
+/**
+ * Public GET callback: Fetch live, accurate stock, indices, commodities, and currency quotes from Yahoo Finance.
+ */
+function finvault_get_market_data() {
+    // Check if we have cached quotes in Transient to prevent IP throttling
+    $cached_data = get_transient( 'finvault_live_market_data' );
+    if ( false !== $cached_data ) {
+        return rest_ensure_response( array(
+            'success' => true,
+            'source'  => 'cache',
+            'data'    => $cached_data
+        ) );
+    }
+
+    // List of active symbols we want to fetch
+    $symbols = array(
+        'nifty'      => '^NSEI',
+        'sensex'     => '^BSESN',
+        'niftybank'  => '^NSEBANK',
+        'niftyit'    => '^CNXIT',
+        'dow'        => '^DJI',
+        'sp500'      => '^GSPC',
+        'nasdaq'     => '^IXIC',
+        'gold'       => 'GC=F',
+        'silver'     => 'SI=F',
+        'crude'      => 'BZ=F',
+        'usdinr'     => 'INR=X'
+    );
+
+    $symbols_string = implode( ',', $symbols );
+    $url = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' . urlencode( $symbols_string );
+
+    // Fetch from Yahoo Finance REST API securely (bypasses browser CORS completely!)
+    $response = wp_remote_get( $url, array(
+        'timeout' => 12,
+        'headers' => array(
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        )
+    ) );
+
+    if ( is_wp_error( $response ) ) {
+        return new WP_Error( 'api_error', 'Failed to retrieve real-time quotes.', array( 'status' => 500 ) );
+    }
+
+    $body = wp_remote_retrieve_body( $response );
+    $data = json_decode( $body, true );
+
+    if ( empty( $data ) || ! isset( $data['quoteResponse']['result'] ) ) {
+        return new WP_Error( 'parse_error', 'Invalid quotes data layout.', array( 'status' => 502 ) );
+    }
+
+    $raw_results = $data['quoteResponse']['result'];
+    $results = array();
+
+    // Map to custom payload structure identical to frontend local structures
+    foreach ( $raw_results as $quote ) {
+        $symbol_key = array_search( $quote['symbol'], $symbols );
+        if ( false !== $symbol_key ) {
+            $results[ $symbol_key ] = array(
+                'symbol'    => $quote['symbol'],
+                'name'      => isset( $quote['shortName'] ) ? $quote['shortName'] : $quote['symbol'],
+                'ltp'       => isset( $quote['regularMarketPrice'] ) ? floatval( $quote['regularMarketPrice'] ) : 0.0,
+                'change'    => isset( $quote['regularMarketChange'] ) ? floatval( $quote['regularMarketChange'] ) : 0.0,
+                'chgPct'    => isset( $quote['regularMarketChangePercent'] ) ? floatval( $quote['regularMarketChangePercent'] ) : 0.0,
+                'high'      => isset( $quote['regularMarketDayHigh'] ) ? floatval( $quote['regularMarketDayHigh'] ) : 0.0,
+                'low'       => isset( $quote['regularMarketDayLow'] ) ? floatval( $quote['regularMarketDayLow'] ) : 0.0,
+                'open'      => isset( $quote['regularMarketOpen'] ) ? floatval( $quote['regularMarketOpen'] ) : 0.0,
+                'prevClose' => isset( $quote['regularMarketPreviousClose'] ) ? floatval( $quote['regularMarketPreviousClose'] ) : 0.0,
+            );
+        }
+    }
+
+    // Cache the parsed response in WordPress Transient for 60 seconds (1 minute cache)
+    set_transient( 'finvault_live_market_data', $results, 60 );
+
+    return rest_ensure_response( array(
+        'success' => true,
+        'source'  => 'live',
+        'data'    => $results
     ) );
 }
