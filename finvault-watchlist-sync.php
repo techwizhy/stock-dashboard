@@ -140,9 +140,12 @@ function finvault_save_user_watchlist( $request ) {
 /**
  * Public GET callback: Fetch live, accurate stock, indices, commodities, and currency quotes from Yahoo Finance.
  */
-function finvault_get_market_data() {
-    // Check if we have cached quotes in Transient to prevent IP throttling
-    $cached_data = get_transient( 'finvault_live_market_data' );
+function finvault_get_market_data( $request ) {
+    $custom_symbols = $request->get_param( 'symbols' );
+    
+    // Create a unique cache key per parameter layout to prevent IP throttling
+    $cache_key = 'finvault_market_data_' . ( ! empty( $custom_symbols ) ? md5( $custom_symbols ) : 'default' );
+    $cached_data = get_transient( $cache_key );
     if ( false !== $cached_data ) {
         return rest_ensure_response( array(
             'success' => true,
@@ -151,7 +154,7 @@ function finvault_get_market_data() {
         ) );
     }
 
-    // List of active symbols we want to fetch
+    // Default fallbacks (Indices & Commodities)
     $symbols = array(
         'nifty'      => '^NSEI',
         'sensex'     => '^BSESN',
@@ -166,7 +169,14 @@ function finvault_get_market_data() {
         'usdinr'     => 'INR=X'
     );
 
-    $symbols_string = implode( ',', $symbols );
+    if ( ! empty( $custom_symbols ) ) {
+        // Sanitize incoming comma-separated symbols securely
+        $symbols_array = array_map( 'sanitize_text_field', explode( ',', $custom_symbols ) );
+    } else {
+        $symbols_array = array_values( $symbols );
+    }
+
+    $symbols_string = implode( ',', $symbols_array );
     $url = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' . urlencode( $symbols_string );
 
     // Fetch from Yahoo Finance REST API securely (bypasses browser CORS completely!)
@@ -191,26 +201,27 @@ function finvault_get_market_data() {
     $raw_results = $data['quoteResponse']['result'];
     $results = array();
 
-    // Map to custom payload structure identical to frontend local structures
+    // Map to custom payload structure compatible with frontend mapping
     foreach ( $raw_results as $quote ) {
-        $symbol_key = array_search( $quote['symbol'], $symbols );
-        if ( false !== $symbol_key ) {
-            $results[ $symbol_key ] = array(
-                'symbol'    => $quote['symbol'],
-                'name'      => isset( $quote['shortName'] ) ? $quote['shortName'] : $quote['symbol'],
-                'ltp'       => isset( $quote['regularMarketPrice'] ) ? floatval( $quote['regularMarketPrice'] ) : 0.0,
-                'change'    => isset( $quote['regularMarketChange'] ) ? floatval( $quote['regularMarketChange'] ) : 0.0,
-                'chgPct'    => isset( $quote['regularMarketChangePercent'] ) ? floatval( $quote['regularMarketChangePercent'] ) : 0.0,
-                'high'      => isset( $quote['regularMarketDayHigh'] ) ? floatval( $quote['regularMarketDayHigh'] ) : 0.0,
-                'low'       => isset( $quote['regularMarketDayLow'] ) ? floatval( $quote['regularMarketDayLow'] ) : 0.0,
-                'open'      => isset( $quote['regularMarketOpen'] ) ? floatval( $quote['regularMarketOpen'] ) : 0.0,
-                'prevClose' => isset( $quote['regularMarketPreviousClose'] ) ? floatval( $quote['regularMarketPreviousClose'] ) : 0.0,
-            );
-        }
+        $symbol_key = $quote['symbol'];
+        $default_key = array_search( $quote['symbol'], $symbols );
+        $key = ( false !== $default_key ) ? $default_key : $symbol_key;
+
+        $results[ $key ] = array(
+            'symbol'    => $quote['symbol'],
+            'name'      => isset( $quote['shortName'] ) ? $quote['shortName'] : $quote['symbol'],
+            'ltp'       => isset( $quote['regularMarketPrice'] ) ? floatval( $quote['regularMarketPrice'] ) : 0.0,
+            'change'    => isset( $quote['regularMarketChange'] ) ? floatval( $quote['regularMarketChange'] ) : 0.0,
+            'chgPct'    => isset( $quote['regularMarketChangePercent'] ) ? floatval( $quote['regularMarketChangePercent'] ) : 0.0,
+            'high'      => isset( $quote['regularMarketDayHigh'] ) ? floatval( $quote['regularMarketDayHigh'] ) : 0.0,
+            'low'       => isset( $quote['regularMarketDayLow'] ) ? floatval( $quote['regularMarketDayLow'] ) : 0.0,
+            'open'      => isset( $quote['regularMarketOpen'] ) ? floatval( $quote['regularMarketOpen'] ) : 0.0,
+            'prevClose' => isset( $quote['regularMarketPreviousClose'] ) ? floatval( $quote['regularMarketPreviousClose'] ) : 0.0,
+        );
     }
 
     // Cache the parsed response in WordPress Transient for 60 seconds (1 minute cache)
-    set_transient( 'finvault_live_market_data', $results, 60 );
+    set_transient( $cache_key, $results, 60 );
 
     return rest_ensure_response( array(
         'success' => true,

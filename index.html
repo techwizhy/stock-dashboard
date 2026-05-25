@@ -400,86 +400,108 @@
                 </div>
             </div>
 
-            <!-- MMI Holographic Radar, Theme Toggler, and Live Refresh Panel -->
-            <div class="flex flex-wrap items-center justify-end gap-6 lg:self-stretch">
+               <!-- MMI Holographic Radar, Theme Toggler, and Live Refresh Panel -->
+            <div class="flex flex-wrap lg:flex-nowrap items-stretch justify-end gap-5 lg:self-stretch">
                 
-                <!-- Restored: Market closed widget -->
-                <div class="bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-3.5 flex flex-col justify-between min-w-[210px] relative overflow-hidden transition-all duration-300">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-outfit">MARKET STATE</span>
+                <!-- Restored: Market State Widget (Stretched) -->
+                <div class="bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 rounded-2xl p-5 flex flex-col justify-between min-w-[210px] relative overflow-hidden transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest font-outfit">MARKET STATE</span>
                         <span class="relative flex h-2 w-2">
                             <span id="marketStatePing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                             <span id="marketStateIndicator" class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                         </span>
                     </div>
-                    <div id="marketStateTextContainer" class="text-base font-extrabold font-outfit text-amber-600 dark:text-amber-400 flex items-center gap-1.5 leading-none">
+                    <div id="marketStateTextContainer" class="text-base font-extrabold font-outfit text-amber-600 dark:text-amber-400 flex items-center gap-1.5 leading-none my-3">
                         <i id="marketStateIcon" class="fa-solid fa-lock text-xs"></i> <span id="marketStateText">CLOSED <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">(WEEKEND)</span></span>
                     </div>
-                    <div id="marketSessionDate" class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold mt-2.5 font-outfit leading-none">
+                    <div id="marketSessionDate" class="text-[10px] text-slate-400 dark:text-slate-500 font-semibold font-outfit leading-none">
                         May 22, 2026 Trading Session
                     </div>
                 </div>
 
-                <!-- REDESIGNED: Holographic Neon Market Mood Index (MMI) Radar Gauge -->
-                <div class="flex items-center bg-slate-100/50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 rounded-2xl p-4 gap-4 min-w-[280px] relative overflow-hidden transition-colors" title="Market Mood Index Radar">
-                    <div class="mmi-radar-disc shrink-0 select-none">
-                        <!-- Holographic sweeps using SVGs -->
-                        <svg class="w-full h-full" viewBox="0 0 100 100">
-                            <!-- Background outer glowing ring -->
-                            <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(99, 102, 241, 0.08)" stroke-width="1.5" />
-                            
-                            <!-- Sector Rings (Red, Orange, Yellow, Green) -->
-                            <circle cx="50" cy="50" r="41" fill="none" stroke="#f43f5e" stroke-width="4.5" stroke-dasharray="257.6" stroke-dashoffset="193.2" class="transform origin-center rotate-[90deg]" opacity="0.65" /> 
-                            <circle cx="50" cy="50" r="41" fill="none" stroke="#f97316" stroke-width="4.5" stroke-dasharray="257.6" stroke-dashoffset="206.1" class="transform origin-center rotate-[162deg]" opacity="0.75" />
-                            <circle cx="50" cy="50" r="41" fill="none" stroke="#eab308" stroke-width="4.5" stroke-dasharray="257.6" stroke-dashoffset="206.1" class="transform origin-center rotate-[234deg]" opacity="0.85" />
-                            <circle cx="50" cy="50" r="41" fill="none" stroke="#10b981" stroke-width="4.5" stroke-dasharray="257.6" stroke-dashoffset="193.2" class="transform origin-center rotate-[306deg]" opacity="0.9" />
-                            
-                            <!-- Sweeping Radar Line -->
-                            <line x1="50" y1="50" x2="50" y2="8" stroke="rgba(99, 102, 241, 0.4)" stroke-width="1" class="radar-sweep-beam" />
-                            <circle cx="50" cy="50" r="41" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="257.6" stroke-dashoffset="82.4" class="transform origin-center rotate-[90deg] radar-glow" />
-                            
-                            <!-- Active needle pointer dot at 68% (Greed Zone) -->
-                            <circle id="mmiNeedleDot" cx="50" cy="9" r="3.5" fill="#6366f1" class="transform origin-center rotate-[244.8deg] radar-glow" />
-                        </svg>
-                        
-                        <!-- Center statistics score overlay -->
-                        <div class="mmi-score-center">
-                            <span id="mmiScoreText" class="text-lg font-extrabold font-outfit text-slate-800 dark:text-white leading-none">68</span>
-                            <span id="mmiLabelText" class="text-[8px] font-bold text-indigo-600 dark:text-indigo-400 font-outfit uppercase mt-0.5 tracking-wider">Greed</span>
+                <!-- REDESIGNED: Tickertape Style Market Mood Index (MMI) Semi-Circular Gauge (Stretched & Stacked) -->
+                <div class="flex flex-col justify-between bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 rounded-2xl p-5 min-w-[285px] relative overflow-hidden transition-colors" title="Market Mood Index (MMI)">
+                    <div class="flex flex-col gap-0.5 self-start">
+                        <span class="text-[8px] font-extrabold text-slate-400/80 uppercase tracking-wider font-outfit block">Know what's the sentiment on the street today</span>
+                        <div class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-outfit">Market Mood Index (MMI)</div>
+                    </div>
+                    
+                    <!-- SVG Gauge Stack Container -->
+                    <div class="w-full flex justify-center mt-2.5">
+                        <div class="w-48 h-26 relative select-none">
+                            <svg class="w-full h-full" viewBox="0 0 100 60">
+                                <!-- Sector Fills (Active Opacity Toggled in JS) -->
+                                <path id="mmiSectorExtFear" d="M 50 55 L 10 55 A 40 40 0 0 1 26.5 22.6 Z" fill="#10b981" fill-opacity="0.02" style="transition: fill-opacity 0.4s ease;" />
+                                <path id="mmiSectorFear" d="M 50 55 L 26.5 22.6 A 40 40 0 0 1 50 15 Z" fill="#f59e0b" fill-opacity="0.02" style="transition: fill-opacity 0.4s ease;" />
+                                <path id="mmiSectorGreed" d="M 50 55 L 50 15 A 40 40 0 0 1 73.5 22.6 Z" fill="#f97316" fill-opacity="0.02" style="transition: fill-opacity 0.4s ease;" />
+                                <path id="mmiSectorExtGreed" d="M 50 55 L 73.5 22.6 A 40 40 0 0 1 90 55 Z" fill="#ef4444" fill-opacity="0.02" style="transition: fill-opacity 0.4s ease;" />
+
+                                <!-- Gauge Main Tracks -->
+                                <path d="M 10 55 A 40 40 0 0 1 26.5 22.6" fill="none" stroke="#10b981" stroke-width="4.5" stroke-linecap="round" />
+                                <path d="M 26.5 22.6 A 40 40 0 0 1 50 15" fill="none" stroke="#f59e0b" stroke-width="4.5" />
+                                <path d="M 50 15 A 40 40 0 0 1 73.5 22.6" fill="none" stroke="#f97316" stroke-width="4.5" />
+                                <path d="M 73.5 22.6 A 40 40 0 0 1 90 55" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" />
+
+                                <!-- Double Border Active Outer Arcs (Radius 44, Opacity Toggled in JS) -->
+                                <path id="mmiOuterExtFear" d="M 6 55 A 44 44 0 0 1 24.1 19.4" fill="none" stroke="#10b981" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0" style="transition: stroke-opacity 0.4s ease;" />
+                                <path id="mmiOuterFear" d="M 24.1 19.4 A 44 44 0 0 1 50 11" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0" style="transition: stroke-opacity 0.4s ease;" />
+                                <path id="mmiOuterGreed" d="M 50 11 A 44 44 0 0 1 75.9 19.4" fill="none" stroke="#f97316" stroke-width="1.2" stroke-opacity="0" style="transition: stroke-opacity 0.4s ease;" />
+                                <path id="mmiOuterExtGreed" d="M 75.9 19.4 A 44 44 0 0 1 94 55" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0" style="transition: stroke-opacity 0.4s ease;" />
+
+                                <!-- Structuring Anchor Baseline -->
+                                <line x1="6" y1="55" x2="94" y2="55" stroke="rgba(148, 163, 184, 0.15)" stroke-width="1" stroke-linecap="round" />
+
+                                <!-- Segment Labels -->
+                                <text x="16" y="51" fill="#10b981" font-size="2.5" font-weight="900" text-anchor="middle" class="font-outfit uppercase tracking-tighter">Ext Fear</text>
+                                <text x="32" y="21" fill="#f59e0b" font-size="2.8" font-weight="900" text-anchor="middle" class="font-outfit uppercase">Fear</text>
+                                <text x="68" y="21" fill="#f97316" font-size="2.8" font-weight="900" text-anchor="middle" class="font-outfit uppercase">Greed</text>
+                                <text x="84" y="51" fill="#ef4444" font-size="2.5" font-weight="900" text-anchor="middle" class="font-outfit uppercase tracking-tighter">Ext Greed</text>
+
+                                <!-- Needle Pointer (rotating smoothly around 50, 55) -->
+                                <g id="mmiNeedleGroup" style="transform-origin: 50px 55px; transform: rotate(22.5deg); transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);">
+                                    <polygon points="48.5,55 51.5,55 50,18" fill="#f97316" filter="drop-shadow(0 2px 4px rgba(249,115,22,0.3))" />
+                                    <circle cx="50" cy="55" r="4.5" fill="#f97316" />
+                                    <circle cx="50" cy="55" r="1.8" fill="#ffffff" />
+                                </g>
+                            </svg>
                         </div>
                     </div>
-                    <div>
-                        <div class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-outfit leading-none">Market Mood Radar</div>
-                        <div id="mmiStageContainer" class="text-sm font-extrabold text-emerald-500 dark:text-emerald-400 mt-1.5 uppercase font-outfit tracking-wide flex items-center gap-1.5">
-                            <span id="mmiPingDot" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> <span id="mmiStageText">Greed Stage</span>
+
+                    <!-- Clean Stacked Score Block -->
+                    <div class="flex flex-col items-center justify-center mt-1 select-none">
+                        <span id="mmiScoreText" class="text-2xl font-black font-outfit text-orange-500 tracking-tight leading-none">62.25</span>
+                        <div id="mmiStageContainer" class="text-[9px] font-extrabold text-orange-600 dark:text-orange-400 font-outfit uppercase mt-1 tracking-widest flex items-center gap-1">
+                            <span id="mmiPingDot" class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-ping"></span>
+                            <span id="mmiStageText">Greed Stage</span>
                         </div>
-                        <div id="mmiDescText" class="text-[9px] text-slate-500 dark:text-slate-400 font-medium leading-normal mt-1 max-w-[150px]">
-                            Bullish liquidity active. Derivatives show solid open interest.
-                        </div>
+                    </div>
+                    <div id="mmiDescText" class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold leading-relaxed text-center mt-2 px-1">
+                        Market mood is currently in Greed zone, suggesting solid domestic capital support.
                     </div>
                 </div>
 
-                <!-- Live Auto-Refresh Controller Box -->
-                <div class="flex flex-col justify-between bg-slate-100/50 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 rounded-2xl p-3.5 gap-2 min-w-[210px]">
+                <!-- Live Auto-Refresh Controller Box (Stretched) -->
+                <div class="flex flex-col justify-between bg-slate-100/60 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 rounded-2xl p-5 min-w-[210px] relative overflow-hidden transition-all duration-300">
                     <div class="flex items-center justify-between">
-                        <span class="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest font-outfit">Live Engine Status</span>
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest font-outfit">Live Engine Status</span>
                         <div class="flex items-center gap-1.5">
-                            <span id="refreshLoader" class="hidden w-3.5 h-3.5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></span>
-                            <span id="liveStatusDot" class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                            <span id="refreshLoader" class="hidden w-3.5 h-3.5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin shrink-0"></span>
+                            <span id="liveStatusDot" class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shrink-0"></span>
                             <span id="liveStatusText" class="text-[9px] font-bold text-emerald-500 uppercase font-outfit">Sim Active</span>
                         </div>
                     </div>
                     
                     <!-- Interval selectors -->
-                    <div class="flex items-center gap-2 mt-1">
+                    <div class="flex items-center gap-2 my-3">
                         <!-- Manual Refresh Trigger -->
-                        <button id="manualRefreshBtn" onclick="triggerManualRefresh()" class="p-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center justify-center transition-all focus:outline-none" title="Refresh Live Data">
+                        <button id="manualRefreshBtn" onclick="triggerManualRefresh()" class="p-2.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center justify-center transition-all focus:outline-none shrink-0" title="Refresh Live Data">
                             <i class="fa-solid fa-arrows-rotate text-xs"></i>
                         </button>
                         
-                        <!-- Auto Interval Dropper -->
+                        <!-- Auto Interval Selector -->
                         <div class="relative flex-1">
-                            <select id="refreshIntervalSelector" onchange="changeInterval()" class="w-full px-2 py-1.5 text-[10px] font-bold rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-indigo-500/40">
+                            <select id="refreshIntervalSelector" onchange="changeInterval()" class="w-full px-2 py-2 text-[10px] font-bold rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-indigo-500/40">
                                 <option value="manual">Manual Refresh</option>
                                 <option value="10">Auto: 10 Secs</option>
                                 <option value="60">Auto: 1 Min</option>
@@ -490,17 +512,20 @@
                     </div>
                     
                     <!-- Last Refreshed dynamic timestamp indicator -->
-                    <div id="countdownAlert" class="text-[9px] text-slate-500 dark:text-slate-400 font-semibold font-outfit mt-0.5 leading-none transition-all duration-300">
+                    <div id="countdownAlert" class="text-[9px] text-slate-400 dark:text-slate-500 font-semibold font-outfit leading-none">
                         Last Refreshed: <span id="lastRefreshedTime" class="text-indigo-600 dark:text-indigo-400 font-bold">18:39:46</span>
                     </div>
                 </div>
 
-                <!-- Theme Toggle Button -->
-                <button id="themeToggle" class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 flex items-center justify-center text-slate-800 dark:text-amber-400 hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shrink-0" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon text-lg dark:hidden"></i>
-                    <i class="fa-solid fa-sun text-lg hidden dark:block"></i>
-                </button>
+                <!-- Theme Toggle Button (Vertically Centered next to Stretched Cards) -->
+                <div class="flex items-center shrink-0">
+                    <button id="themeToggle" class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-white/5 flex items-center justify-center text-slate-800 dark:text-amber-400 hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shrink-0" aria-label="Toggle Theme">
+                        <i class="fa-solid fa-moon text-lg dark:hidden"></i>
+                        <i class="fa-solid fa-sun text-lg hidden dark:block"></i>
+                    </button>
+                </div>
             </div>
+
         </header>
 
         <!-- Subpage Navigation Tabs -->
@@ -1298,7 +1323,7 @@
             { symbol: "POWERGRID", name: "Power Grid Corp.", ltp: 294.30, change: -5.40, chgPct: -1.80, high: 301.00, low: 292.50, open: 300.00, prevClose: 299.70, h52w: 350.00, l52w: 180.00, ytd: 15.2, rating: "Neutral" },
             { symbol: "NTPC", name: "NTPC Ltd.", ltp: 355.00, change: -5.80, chgPct: -1.61, high: 362.00, low: 352.00, open: 361.00, prevClose: 360.80, h52w: 395.00, l52w: 220.00, ytd: 18.4, rating: "Neutral" },
             { symbol: "COALINDIA", name: "Coal India Ltd.", ltp: 445.50, change: -6.80, chgPct: -1.50, high: 454.00, low: 442.00, open: 452.00, prevClose: 452.30, h52w: 520.00, l52w: 250.00, ytd: 20.1, rating: "Hold" },
-            { symbol: "BPCL", name: "Bharat Petroleum", ltp: 610.20, change: -8.95, chgPct: -1.45, high: 621.00, low: 608.00, open: 620.00, prevClose: 619.15, h52w: 680.00, l52w: 330.00, ytd: 14.8, rating: "Hold" },
+            { symbol: "BPCL", name: "Bharat Petroleum", ltp: 307.30, change: 11.70, chgPct: 3.96, high: 312.00, low: 298.00, open: 300.00, prevClose: 295.60, h52w: 380.00, l52w: 180.00, ytd: 22.1, rating: "Buy" },
             { symbol: "TATAMOTORS", name: "Tata Motors Ltd.", ltp: 950.40, change: -13.20, chgPct: -1.37, high: 968.00, low: 946.00, open: 965.00, prevClose: 963.60, h52w: 1080.00, l52w: 600.00, ytd: 28.1, rating: "Buy" },
             { symbol: "JSWSTEEL", name: "JSW Steel Ltd.", ltp: 840.50, change: -11.20, chgPct: -1.31, high: 855.00, low: 838.00, open: 852.00, prevClose: 851.70, h52w: 950.00, l52w: 720.00, ytd: -2.4, rating: "Sell" },
             { symbol: "ADANIENT", name: "Adani Enterprises", ltp: 3120.00, change: -39.20, chgPct: -1.24, high: 3175.00, low: 3105.00, open: 3160.00, prevClose: 3159.20, h52w: 3600.00, l52w: 1800.00, ytd: 10.5, rating: "Sell" },
@@ -1308,7 +1333,7 @@
             { symbol: "ASIANPAINT", name: "Asian Paints Ltd.", ltp: 2820.00, change: -25.60, chgPct: -0.90, high: 2855.00, low: 2810.00, open: 2850.00, prevClose: 2845.60, h52w: 3400.00, l52w: 2750.00, ytd: -11.4, rating: "Sell" },
             { symbol: "NESTLEIND", name: "Nestle India Ltd.", ltp: 2480.00, change: -21.20, chgPct: -0.85, high: 2510.00, low: 2472.00, open: 2505.00, prevClose: 2501.20, h52w: 2800.00, l52w: 2100.00, ytd: -6.7, rating: "Hold" },
             { symbol: "BAJAJ-AUTO", name: "Bajaj Auto Ltd.", ltp: 8950.00, change: -72.00, chgPct: -0.80, high: 9050.00, low: 8910.00, open: 9020.00, prevClose: 9022.00, h52w: 9800.00, l52w: 4500.00, ytd: 32.4, rating: "Neutral" },
-            { symbol: "EICHERMOT", name: "Eicher Motors Ltd.", ltp: 4350.00, change: -32.80, chgPct: -0.75, high: 4400.00, low: 4330.00, open: 4390.00, prevClose: 4382.80, h52w: 4900.00, l52w: 3200.00, ytd: 14.3, rating: "Neutral" },
+            { symbol: "EICHERMOT", name: "Eicher Motors Ltd.", ltp: 7356.00, change: 374.00, chgPct: 5.36, high: 7400.00, low: 7200.00, open: 7210.00, prevClose: 6982.00, h52w: 8000.00, l52w: 4800.00, ytd: 15.2, rating: "Strong Buy" },
             { symbol: "TECHM", name: "Tech Mahindra Ltd.", ltp: 1280.00, change: -9.00, chgPct: -0.70, high: 1295.00, low: 1275.00, open: 1292.00, prevClose: 1289.00, h52w: 1450.00, l52w: 1050.00, ytd: 2.1, rating: "Hold" },
             { symbol: "HEROMOTOCO", name: "Hero MotoCorp Ltd.", ltp: 4550.00, change: -29.70, chgPct: -0.65, high: 4600.00, low: 4530.00, open: 4590.00, prevClose: 4579.70, h52w: 5000.00, l52w: 2700.00, ytd: 10.8, rating: "Hold" },
             { symbol: "CIPLA", name: "Cipla Ltd.", ltp: 1350.40, change: 14.20, chgPct: 1.06, high: 1362.00, low: 1332.00, open: 1335.00, prevClose: 1336.20, h52w: 1520.00, l52w: 880.00, ytd: 14.2, rating: "Buy" },
@@ -1321,7 +1346,10 @@
             { symbol: "BAJAJFINSV", name: "Bajaj Finserv Ltd.", ltp: 1590.00, change: 12.40, chgPct: 0.79, high: 1605.00, low: 1572.00, open: 1575.00, prevClose: 1577.60, h52w: 1800.00, l52w: 1300.00, ytd: 2.1, rating: "Buy" },
             { symbol: "BAJFINANCE", name: "Bajaj Finance Ltd.", ltp: 6850.00, change: -92.00, chgPct: -1.33, high: 6980.00, low: 6810.00, open: 6960.00, prevClose: 6942.00, h52w: 8200.00, l52w: 5500.00, ytd: -8.4, rating: "Sell" },
             { symbol: "LTIM", name: "LTI Mindtree Ltd.", ltp: 4950.00, change: 65.40, chgPct: 1.34, high: 5010.00, low: 4880.00, open: 4882.00, prevClose: 4884.60, h52w: 6400.00, l52w: 4200.00, ytd: 5.6, rating: "Buy" },
-            { symbol: "HCLTECH", name: "HCL Technologies", ltp: 1320.00, change: -18.20, chgPct: -1.36, high: 1345.00, low: 1312.00, open: 1340.00, prevClose: 1338.20, h52w: 1680.00, l52w: 1050.00, ytd: 12.3, rating: "Hold" }
+            { symbol: "HCLTECH", name: "HCL Technologies", ltp: 1320.00, change: -18.20, chgPct: -1.36, high: 1345.00, low: 1312.00, open: 1340.00, prevClose: 1338.20, h52w: 1680.00, l52w: 1050.00, ytd: 12.3, rating: "Hold" },
+            { symbol: "ADANIPOWER", name: "Adani Power Ltd.", ltp: 230.70, change: 11.35, chgPct: 5.19, high: 235.00, low: 222.00, open: 224.00, prevClose: 219.35, h52w: 300.00, l52w: 130.00, ytd: 42.4, rating: "Strong Buy" },
+            { symbol: "IOC", name: "Indian Oil Corporation", ltp: 144.26, change: 4.78, chgPct: 3.43, high: 147.00, low: 141.00, open: 142.00, prevClose: 139.48, h52w: 180.00, l52w: 90.00, ytd: 12.8, rating: "Buy" },
+            { symbol: "CHOLAFIN", name: "Cholamandalam Invest.", ltp: 1591.00, change: 51.25, chgPct: 3.33, high: 1610.00, low: 1550.00, open: 1560.00, prevClose: 1539.75, h52w: 1750.00, l52w: 950.00, ytd: 18.5, rating: "Buy" }
         ];
 
         // Commodities Data Structure
@@ -1535,143 +1563,154 @@
             if (isFetchingQuotes) return;
             isFetchingQuotes = true;
 
-            const indicesMap = {
-                "nifty": "^NSEI",
-                "sensex": "^BSESN",
-                "dow": "^DJI",
-                "sp500": "^GSPC",
-                "nasdaq": "^IXIC",
-                "gold": "GC=F",
-                "silver": "SI=F",
-                "crude": "BZ=F",
-                "usdinr": "INR=X"
-            };
+            const loader = document.getElementById("refreshLoader");
+            if (loader) loader.classList.remove("hidden");
 
-            const stockMap = {
-                "TRENT": "TRENT.NS",
-                "SHRIRAMFIN": "SHRIRAMFIN.NS",
-                "AXISBANK": "AXISBANK.NS",
-                "ICICIBANK": "ICICIBANK.NS",
-                "WIPRO": "WIPRO.NS",
-                "RELIANCE": "RELIANCE.NS",
-                "TCS": "TCS.NS",
-                "INFY": "INFY.NS",
-                "HDFCBANK": "HDFCBANK.NS",
-                "BHARTIARTL": "BHARTIARTL.NS",
-                "HINDUNILVR": "HINDUNILVR.NS",
-                "SBIN": "SBIN.NS",
-                "LT": "LT.NS",
-                "TATAMOTORS": "TATAMOTORS.NS",
-                "ITC": "ITC.NS"
-            };
+            // Compile dynamic list of all Yahoo tickers to request
+            const indexTickers = ["^NSEI", "^BSESN", "^NSEBANK", "^CNXIT", "^DJI", "^GSPC", "^IXIC", "GC=F", "SI=F", "BZ=F", "INR=X"];
+            const stockTickers = niftyMasterDatabase.map(s => s.symbol === "M&M" ? "M%26M.NS" : s.symbol + ".NS");
+            const allTickers = [...indexTickers, ...stockTickers];
 
-            const fetchPromises = [];
+            let fetchedData = null;
+            let fetchSource = "";
 
-            // 1. Queue Indices & Commodities
-            Object.entries(indicesMap).forEach(([key, ySymbol]) => {
-                fetchPromises.push(
-                    fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySymbol)}?interval=1d&range=1d`)
-                        .then(res => res.json())
-                        .then(json => {
-                            const meta = json.chart.result[0].meta;
-                            return {
-                                type: "indices",
-                                key,
-                                ltp: meta.regularMarketPrice,
-                                prevClose: meta.previousClose,
-                                change: meta.regularMarketPrice - meta.previousClose,
-                                chgPct: ((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100
-                            };
-                        })
-                        .catch(err => {
-                            console.warn(`Client quote offline for ${key}:`, err);
-                            return null;
-                        })
-                );
-            });
-
-            // 2. Queue Selected Nifty 50 Stocks
-            Object.entries(stockMap).forEach(([symbol, ySymbol]) => {
-                fetchPromises.push(
-                    fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySymbol)}?interval=1d&range=1d`)
-                        .then(res => res.json())
-                        .then(json => {
-                            const meta = json.chart.result[0].meta;
-                            return {
-                                type: "stocks",
-                                symbol,
-                                ltp: meta.regularMarketPrice,
-                                prevClose: meta.previousClose,
-                                change: meta.regularMarketPrice - meta.previousClose,
-                                chgPct: ((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100,
-                                open: meta.regularMarketOpen || meta.regularMarketPrice,
-                                high: meta.high || meta.regularMarketPrice,
-                                low: meta.low || meta.regularMarketPrice
-                            };
-                        })
-                        .catch(err => {
-                            console.warn(`Client quote offline for stock ${symbol}:`, err);
-                            return null;
-                        })
-                );
-            });
-
+            // 1. Attempt to fetch from local WordPress secure transient cache first
             try {
-                const results = await Promise.all(fetchPromises);
-                logToTerminal("Connecting to Yahoo Finance live feed server...");
-                
-                results.forEach(res => {
-                    if (!res) return;
+                const wpUrl = `/wp-json/finvault/v1/market-data?symbols=${allTickers.join(",")}`;
+                const wpRes = await fetch(wpUrl);
+                if (wpRes.ok) {
+                    const wpJson = await wpRes.json();
+                    if (wpJson && wpJson.success && wpJson.data) {
+                        fetchedData = wpJson.data;
+                        fetchSource = "WordPress Caching Proxy";
+                    }
+                }
+            } catch (err) {
+                console.warn("WordPress proxy endpoint offline. Attempting direct CORS proxy fetch...");
+            }
 
-                    if (res.type === "indices") {
-                        if (res.key === "nifty") {
-                            window.niftyLtp = res.ltp;
-                            window.niftyChange = res.change;
-                            window.niftyPct = res.chgPct;
-                        } else if (res.key === "dow") {
-                            const dow = globalMarketsData.find(g => g.symbol === "DOW JONES");
-                            if (dow) { dow.ltp = res.ltp; dow.change = res.change; dow.chgPct = res.chgPct; }
-                        } else if (res.key === "sp500") {
-                            const sp = globalMarketsData.find(g => g.symbol === "S&P 500");
-                            if (sp) { sp.ltp = res.ltp; sp.change = res.change; sp.chgPct = res.chgPct; }
-                        } else if (res.key === "nasdaq") {
-                            const nas = globalMarketsData.find(g => g.symbol === "NASDAQ");
-                            if (nas) { nas.ltp = res.ltp; nas.change = res.change; nas.chgPct = res.chgPct; }
-                        } else if (res.key === "gold") {
-                            const gold = commoditiesData.find(c => c.symbol === "GOLD (10g)");
-                            if (gold) { gold.ltp = res.ltp; gold.change = res.change; gold.chgPct = res.chgPct; }
-                        } else if (res.key === "silver") {
-                            const silver = commoditiesData.find(c => c.symbol === "SILVER (1kg)");
-                            if (silver) { silver.ltp = res.ltp; silver.change = res.change; silver.chgPct = res.chgPct; }
-                        } else if (res.key === "crude") {
-                            const crude = commoditiesData.find(c => c.symbol === "BRENT CRUDE");
-                            if (crude) { crude.ltp = res.ltp; crude.change = res.change; crude.chgPct = res.chgPct; }
-                        } else if (res.key === "usdinr") {
-                            const usd = currenciesData.find(c => c.symbol === "USD / INR");
-                            if (usd) { usd.ltp = res.ltp; usd.change = res.change; usd.chgPct = res.chgPct; }
+            // 2. Standalone Fallback: Fetch directly from Yahoo Finance via AllOrigins CORS proxy
+            if (!fetchedData) {
+                try {
+                    const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${allTickers.join(",")}`;
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`;
+                    
+                    const response = await fetch(proxyUrl);
+                    if (response.ok) {
+                        const json = await response.json();
+                        if (json && json.quoteResponse && json.quoteResponse.result) {
+                            fetchedData = {};
+                            json.quoteResponse.result.forEach(q => {
+                                fetchedData[q.symbol] = {
+                                    symbol: q.symbol,
+                                    name: q.shortName || q.symbol,
+                                    ltp: q.regularMarketPrice,
+                                    change: q.regularMarketChange,
+                                    chgPct: q.regularMarketChangePercent,
+                                    high: q.regularMarketDayHigh || q.regularMarketPrice,
+                                    low: q.regularMarketDayLow || q.regularMarketPrice,
+                                    open: q.regularMarketOpen || q.regularMarketPrice,
+                                    prevClose: q.regularMarketPreviousClose || q.regularMarketPrice
+                                };
+                            });
+                            fetchSource = "Yahoo Finance Live (CORS Proxy)";
                         }
-                    } else if (res.type === "stocks") {
-                        const stock = niftyMasterDatabase.find(s => s.symbol === res.symbol);
-                        if (stock) {
-                            stock.ltp = res.ltp;
-                            stock.change = res.change;
-                            stock.chgPct = res.chgPct;
-                            stock.open = res.open;
-                            stock.high = res.high;
-                            stock.low = res.low;
-                            stock.prevClose = res.prevClose;
-                        }
+                    }
+                } catch (err) {
+                    console.error("Direct CORS proxy quote fetch failed: ", err);
+                    logToTerminal("ERROR: Quote server offline. Using local simulated tick walk.");
+                }
+            }
+
+            // 3. Process and apply the retrieved market data to local structures
+            if (fetchedData) {
+                logToTerminal(`Connected. Sync source: ${fetchSource}`);
+
+                // Map Indices
+                const nifty = fetchedData["^NSEI"];
+                if (nifty) {
+                    window.niftyLtp = nifty.ltp;
+                    window.niftyChange = nifty.change;
+                    window.niftyPct = nifty.chgPct;
+                }
+
+                // Map Global Markets
+                const dow = fetchedData["^DJI"];
+                const dowAsset = globalMarketsData.find(g => g.symbol === "DOW JONES");
+                if (dow && dowAsset) { dowAsset.ltp = dow.ltp; dowAsset.change = dow.change; dowAsset.chgPct = dow.chgPct; }
+
+                const sp = fetchedData["^GSPC"];
+                const spAsset = globalMarketsData.find(g => g.symbol === "S&P 500");
+                if (sp && spAsset) { spAsset.ltp = sp.ltp; spAsset.change = sp.change; spAsset.chgPct = sp.chgPct; }
+
+                const nas = fetchedData["^IXIC"];
+                const nasAsset = globalMarketsData.find(g => g.symbol === "NASDAQ");
+                if (nas && nasAsset) { nasAsset.ltp = nas.ltp; nasAsset.change = nas.change; nasAsset.chgPct = nas.chgPct; }
+
+                // Map Currencies
+                const usdinr = fetchedData["INR=X"];
+                const usdAsset = currenciesData.find(c => c.symbol === "USD / INR");
+                if (usdinr && usdAsset) { usdAsset.ltp = usdinr.ltp; usdAsset.change = usdinr.change; usdAsset.chgPct = usdinr.chgPct; }
+
+                // Map Commodities with precise spot currency conversions
+                const usdRate = usdAsset ? usdAsset.ltp : 83.5;
+
+                const gold = fetchedData["GC=F"];
+                const goldAsset = commoditiesData.find(c => c.symbol === "GOLD (10g)");
+                if (gold && goldAsset) {
+                    // Gold Futures are per troy ounce (31.1035g) in USD
+                    const gold10gInr = (gold.ltp / 31.1035) * 10 * usdRate;
+                    const goldChange10gInr = (gold.change / 31.1035) * 10 * usdRate;
+                    goldAsset.ltp = parseFloat(gold10gInr.toFixed(2));
+                    goldAsset.change = parseFloat(goldChange10gInr.toFixed(2));
+                    goldAsset.chgPct = gold.chgPct;
+                }
+
+                const silver = fetchedData["SI=F"];
+                const silverAsset = commoditiesData.find(c => c.symbol === "SILVER (1kg)");
+                if (silver && silverAsset) {
+                    // Silver is per troy ounce (32.1507 ounces = 1kg) in USD
+                    const silver1kgInr = silver.ltp * 32.1507 * usdRate;
+                    const silverChange1kgInr = silver.change * 32.1507 * usdRate;
+                    silverAsset.ltp = parseFloat(silver1kgInr.toFixed(2));
+                    silverAsset.change = parseFloat(silverChange1kgInr.toFixed(2));
+                    silverAsset.chgPct = silver.chgPct;
+                }
+
+                const crude = fetchedData["BZ=F"];
+                const crudeAsset = commoditiesData.find(c => c.symbol === "BRENT CRUDE");
+                if (crude && crudeAsset) {
+                    crudeAsset.ltp = crude.ltp;
+                    crudeAsset.change = crude.change;
+                    crudeAsset.chgPct = crude.chgPct;
+                }
+
+                // Map all 55 constituent stocks dynamically
+                niftyMasterDatabase.forEach(stock => {
+                    const ySym = stock.symbol === "M&M" ? "M%26M.NS" : stock.symbol + ".NS";
+                    const data = fetchedData[ySym] || fetchedData[decodeURIComponent(ySym)] || fetchedData[stock.symbol + ".NS"];
+                    if (data) {
+                        stock.ltp = data.ltp || stock.ltp;
+                        stock.change = data.change || stock.change;
+                        stock.chgPct = data.chgPct || stock.chgPct;
+                        stock.open = data.open || stock.open;
+                        stock.high = data.high || stock.high;
+                        stock.low = data.low || stock.low;
+                        stock.prevClose = data.prevClose || stock.prevClose;
+                        // Dynamically recalibrate the technical rating
+                        stock.rating = stock.chgPct >= 1.5 ? "Strong Buy" : (stock.chgPct >= 0 ? "Buy" : (stock.chgPct > -1.5 ? "Hold" : "Sell"));
                     }
                 });
 
-                logToTerminal("Yahoo Finance live quotes successfully synced!");
-            } catch (err) {
-                console.error("Yahoo Finance multi quote error: ", err);
-            } finally {
-                isFetchingQuotes = false;
-                computeMoversFromDatabase();
-                updateHighlightsPanel();
+                logToTerminal("Swarm synchronized with live market feeds successfully!");
             }
+
+            isFetchingQuotes = false;
+            if (loader) loader.classList.add("hidden");
+
+            computeMoversFromDatabase();
+            updateHighlightsPanel();
+            renderMovers();
         }
 
         // Simulates realistic stock/commodity ticker changes (tick-by-tick random walks)
@@ -1713,61 +1752,81 @@
 
         // Dynamic live needle gauge and stage label renderer for Market Mood Index (MMI)
         function updateMMILive(score) {
-            const needle = document.getElementById("mmiNeedleDot");
+            const needle = document.getElementById("mmiNeedleGroup");
             const scoreText = document.getElementById("mmiScoreText");
-            const labelText = document.getElementById("mmiLabelText");
             const stageText = document.getElementById("mmiStageText");
             const descText = document.getElementById("mmiDescText");
             const pingDot = document.getElementById("mmiPingDot");
 
             if (!needle || !scoreText) return;
 
-            scoreText.textContent = score;
+            // Display score with two decimals to mirror Tickertape's institutional precision
+            scoreText.textContent = typeof score === 'number' ? score.toFixed(2) : score;
 
-            // Needle angle rotation (90deg is 0, full circle is 360deg)
-            const rotationAngle = 90 + (score / 100) * 360;
+            // Needle angle rotation on a perfect 180-degree semi-circular sweep
+            // 0 score points left (-90deg), 50 points top (0deg), 100 points right (90deg)
+            const rotationAngle = -90 + (parseFloat(score) / 100) * 180;
             needle.style.transform = `rotate(${rotationAngle}deg)`;
 
-            let moodLabel = "Neutral";
-            let moodStage = "Neutral Stage";
+            let moodStage = "Neutral";
             let moodDesc = "Market shows balanced allocation strength.";
-            let colorClass = "text-yellow-500 dark:text-yellow-400";
-            let bgClass = "bg-yellow-500";
+            let colorClass = "text-amber-500 dark:text-amber-400";
+            let bgClass = "bg-amber-500";
+            let activeZone = "neutral";
 
             if (score < 30) {
-                moodLabel = "Fear";
                 moodStage = "Extreme Fear";
                 moodDesc = "High market panic. Volatility indices spiking. FIIs liquidating blocks.";
-                colorClass = "text-rose-500 dark:text-rose-400 animate-pulse";
-                bgClass = "bg-rose-500";
+                colorClass = "text-emerald-500 dark:text-emerald-400 animate-pulse";
+                bgClass = "bg-emerald-500";
+                activeZone = "extfear";
             } else if (score >= 30 && score < 50) {
-                moodLabel = "Fear";
                 moodStage = "Fear Stage";
                 moodDesc = "Cautious retail sentiments. Option puts indicate short-term coverage.";
-                colorClass = "text-orange-500 dark:text-orange-400";
-                bgClass = "bg-orange-500";
+                colorClass = "text-amber-500 dark:text-amber-400";
+                bgClass = "bg-amber-500";
+                activeZone = "fear";
             } else if (score >= 50 && score < 70) {
-                moodLabel = "Greed";
                 moodStage = "Greed Stage";
                 moodDesc = "Bullish liquidity active. Derivatives show solid open interest.";
-                colorClass = "text-emerald-500 dark:text-emerald-400";
-                bgClass = "bg-emerald-500";
+                colorClass = "text-orange-500 dark:text-orange-400";
+                bgClass = "bg-orange-500";
+                activeZone = "greed";
             } else if (score >= 70) {
-                moodLabel = "Greed";
                 moodStage = "Extreme Greed";
                 moodDesc = "FOMO driving high premiums. Valuation metrics highly stretched.";
-                colorClass = "text-purple-500 dark:text-purple-400 animate-bounce";
-                bgClass = "bg-purple-500";
+                colorClass = "text-rose-500 dark:text-rose-400 animate-bounce";
+                bgClass = "bg-rose-500";
+                activeZone = "extgreed";
             }
 
-            labelText.textContent = moodLabel;
-            stageText.textContent = moodStage;
-            descText.textContent = moodDesc;
+            if (stageText) stageText.textContent = moodStage;
+            if (descText) descText.textContent = moodDesc;
             
-            // Apply colors
+            // Dynamic Active Sector Highlight Rendering in SVG
+            const sectors = {
+                extfear: { fill: "mmiSectorExtFear", border: "mmiOuterExtFear" },
+                fear: { fill: "mmiSectorFear", border: "mmiOuterFear" },
+                greed: { fill: "mmiSectorGreed", border: "mmiOuterGreed" },
+                extgreed: { fill: "mmiSectorExtGreed", border: "mmiOuterExtGreed" }
+            };
+
+            Object.entries(sectors).forEach(([zoneKey, elements]) => {
+                const fillEl = document.getElementById(elements.fill);
+                const borderEl = document.getElementById(elements.border);
+                if (zoneKey === activeZone) {
+                    if (fillEl) fillEl.setAttribute("fill-opacity", "0.15");
+                    if (borderEl) borderEl.setAttribute("stroke-opacity", "1");
+                } else {
+                    if (fillEl) fillEl.setAttribute("fill-opacity", "0.02");
+                    if (borderEl) borderEl.setAttribute("stroke-opacity", "0");
+                }
+            });
+
+            // Apply color states to text and indicator badges
             const stageContainer = document.getElementById("mmiStageContainer");
             if (stageContainer) {
-                stageContainer.className = `text-sm font-extrabold ${colorClass} mt-1.5 uppercase font-outfit tracking-wide flex items-center gap-1.5`;
+                stageContainer.className = `text-[9px] font-extrabold ${colorClass} uppercase font-outfit tracking-widest flex items-center gap-1.5`;
             }
             if (pingDot) {
                 pingDot.className = `w-1.5 h-1.5 rounded-full ${bgClass} animate-ping`;
@@ -1794,9 +1853,9 @@
             const totalStocks = niftyMasterDatabase.length;
             const adRatio = advances / (totalStocks || 1); // 0 to 1
 
-            // Base score derived from Advancing ratio + Nifty percentage factor
-            let moodScore = Math.round(adRatio * 100);
-            moodScore += Math.round(niftyPct * 12);
+            // Base score derived from Advancing ratio + Nifty percentage factor (preserves dynamic decimal precision)
+            let moodScore = adRatio * 100;
+            moodScore += niftyPct * 12;
             moodScore = Math.max(5, Math.min(95, moodScore)); // Keep inside gauge bounds (5 - 95)
             
             // Dynamic UI updates
